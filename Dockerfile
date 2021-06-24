@@ -61,3 +61,4 @@ EXPOSE 5353/tcp 5353/udp
 
 HEALTHCHECK --interval=5s --timeout=3s --start-period=5s CMD drill -p 5353 @127.0.0.1 google.com || exit 1
 
+CMD ["/start.sh"]
