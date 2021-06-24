@@ -52,7 +52,7 @@ jobs:
           context: .
           push: true
           file: ./Dockerfile
-          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x,darwin
+          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,darwin
           build-args: |
             VERSION=${{ steps.prepare.outputs.version }}
             BUILD_DATE=${{ steps.prepare.outputs.build_date }}
