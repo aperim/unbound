@@ -1,7 +1,7 @@
 # ----------------------------
 
 FROM alpine as unbound
-ARG VERSION=latest
+ARG UNBOUND_VERSION=latest
 
 WORKDIR /tmp/src
 
@@ -28,20 +28,27 @@ RUN apk add --no-cache build-base curl linux-headers libevent libevent-dev expat
 
 FROM alpine
 
+ARG BUILD_DESCRIPTION="Unbound, in a container"
+ARG UNBOUND_VERSION=latest
+ARG BUILD_NAME="Unbound v${UNBOUND_VERSION}"
 ARG BUILD_DATE
-ARG VERSION
-ARG VCS_REF
+ARG BUILD_REF
+ARG BUILD_REPOSITORY
+ARG BUILD_VERSION
 
-LABEL maintainer="Troy Kelly <troy@aperim.com>"
-LABEL org.label-schema.schema-version="1.0"
-LABEL org.label-schema.name="aperim/unbound"
-LABEL org.label-schema.description="Unbound v{$VERSION} recursive DNS resolver for PiHole"
-LABEL org.label-schema.url="https://unbound.net/"
-LABEL org.label-schema.vcs-url="https://github.com/aperim/unbound"
-LABEL org.label-schema.docker.cmd="docker run -p 5353:5353/tcp -p 5353:5353/udp aperim/unbound"
-LABEL org.label-schema.build-date="${BUILD_DATE}"
-LABEL org.label-schema.version="${VERSION}"
-LABEL org.label-schema.vcs-ref="${VCS_REF}"
+LABEL \
+    maintainer="Troy Kelly <troy@troykelly.com>" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
+    org.opencontainers.image.vendor="Troy Kelly" \
+    org.opencontainers.image.authors="Troy Kelly <troy@troykelly.com>" \
+    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.url="https://troykelly" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
+    org.opencontainers.image.created=${BUILD_DATE} \
+    org.opencontainers.image.revision=${BUILD_REF} \
+    org.opencontainers.image.version=${BUILD_VERSION}
 
 COPY --from=unbound /opt/ /opt/
 
