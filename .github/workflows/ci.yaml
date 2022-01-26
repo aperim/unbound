@@ -46,7 +46,7 @@ jobs:
 
           echo "::set-output name=environment::${environment}"
           echo "::set-output name=version::${version}"
-          
+
           echo "::set-output name=unbound_version::${unbound_release:8}"
 
           echo "::set-output name=name::Unbound"

@@ -1,4 +1,5 @@
 #!/usr/bin/env ash
+# shellcheck disable=SC2001,SC2059
 
 mkdir -p /opt/unbound/etc/unbound/dev 2>/dev/null
 cp -a /dev/random /dev/urandom /opt/unbound/etc/unbound/dev/
