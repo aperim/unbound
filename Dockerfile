@@ -1,7 +1,7 @@
 # ----------------------------
 
 FROM alpine as unbound
-ARG VERSION
+ARG VERSION=latest
 
 WORKDIR /tmp/src
 
@@ -9,17 +9,20 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN addgroup _unbound && adduser -D -H -s /etc -h /dev/null -G _unbound _unbound
 
-RUN apk add --no-cache build-base curl linux-headers libevent libevent-dev expat expat-dev openssl openssl-dev && \
-        curl -fsSL https://nlnetlabs.nl/downloads/unbound/unbound-${VERSION}.tar.gz -o unbound.tar.gz && \
-  curl -fsSL https://www.internic.net/domain/named.root -o root.hints && \
-        tar xzf unbound.tar.gz && \
-  cd unbound-* && \
-  ./configure --prefix=/opt/unbound --with-pthreads --with-username=_unbound --with-libevent --enable-event-api --disable-flto && \
-  make && make install && \
-  cd .. && \
-  mkdir -p /opt/unbound/etc/unbound/var && \
-  mv root.hints /opt/unbound/etc/unbound/var/ && \
-  rm -Rf /opt/unbound/share /opt/unbound/include /opt/unbound/etc/unbound/unbound.conf
+RUN apk add --no-cache build-base curl linux-headers libevent libevent-dev expat expat-dev openssl openssl-dev nghttp2-dev && \
+      curl -L https://github.com/lukas2511/dehydrated/archive/master.tar.gz | tar -xz && \
+      mkdir -p /opt && \
+      mv ./dehydrated-master/dehydrated /opt/ && \
+      curl -fsSL https://nlnetlabs.nl/downloads/unbound/unbound-${VERSION}.tar.gz -o unbound.tar.gz && \
+      curl -fsSL https://www.internic.net/domain/named.root -o root.hints && \
+      tar xzf unbound.tar.gz && \
+      cd unbound-* && \
+      ./configure --prefix=/opt/unbound --with-pthreads --with-username=_unbound --with-libevent --with-libnghttp2 --enable-event-api --disable-flto && \
+      make && make install && \
+      cd .. && \
+      mkdir -p /opt/unbound/etc/unbound/var && \
+      mv root.hints /opt/unbound/etc/unbound/var/ && \
+      rm -Rf /opt/unbound/share /opt/unbound/include /opt/unbound/etc/unbound/unbound.conf
 
 # ----------------------------
 
@@ -46,14 +49,25 @@ COPY start.sh pi-hole.conf unbound.conf /
 
 WORKDIR /opt/unbound/etc/unbound
 
-RUN apk add --no-cache libevent expat curl openssl drill && \
-        addgroup _unbound && adduser -D -H -s /etc -h /dev/null -G _unbound _unbound && \
-        chmod +x /start.sh && \
-        chmod -x /unbound.conf /pi-hole.conf && \
-  mkdir -p unbound.conf.d && \
-  cp -av /unbound.conf . && \
-  cp -av /pi-hole.conf unbound.conf.d/ && \
-  chown -R _unbound:_unbound /opt/unbound /unbound.conf /pi-hole.conf
+RUN apk add --no-cache \
+      bash \
+      coreutils \
+      curl \
+      diffutils \
+      drill \
+      expat \
+      gawk \
+      grep \
+      libevent \
+      openssl \
+      sed && \
+      addgroup _unbound && adduser -D -H -s /etc -h /dev/null -G _unbound _unbound && \
+      chmod +x /start.sh && \
+      chmod -x /unbound.conf /pi-hole.conf && \
+      mkdir -p unbound.conf.d && \
+      cp -av /unbound.conf . && \
+      cp -av /pi-hole.conf unbound.conf.d/ && \
+      chown -R _unbound:_unbound /opt/unbound /unbound.conf /pi-hole.conf
 
 ENV PATH /opt/unbound/sbin:"$PATH"
 
