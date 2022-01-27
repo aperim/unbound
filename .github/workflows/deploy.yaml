@@ -86,6 +86,7 @@ jobs:
             aperimau/unbound
             ghcr.io/aperim/unbound
           # generate Docker tags based on the following events/attributes
+          # yamllint disable rule:line-length
           tags: |
             type=schedule
             type=ref,event=branch
@@ -95,6 +96,7 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
             type=raw,value=unbound-v${{ needs.information.outputs.unbound_version }}
+          # yamllint enable rule:line-length
 
       - name: 🏗 Set up build cache
         id: cache
