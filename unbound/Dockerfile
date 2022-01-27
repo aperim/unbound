@@ -13,7 +13,7 @@ RUN apk add --no-cache build-base=0.5-r2 curl=7.80.0-r0 linux-headers=5.10.41-r0
       curl -L https://github.com/lukas2511/dehydrated/archive/master.tar.gz | tar -xz && \
       mkdir -p /opt && \
       mv ./dehydrated-master/dehydrated /opt/ && \
-      curl -fsSL https://nlnetlabs.nl/downloads/unbound/unbound-${VERSION}.tar.gz -o unbound.tar.gz && \
+      curl -fsSL https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz -o unbound.tar.gz && \
       curl -fsSL https://www.internic.net/domain/named.root -o root.hints && \
       tar xzf unbound.tar.gz && \
       cd unbound-* && \
