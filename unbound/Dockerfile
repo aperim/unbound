@@ -1,6 +1,6 @@
 # ----------------------------
 
-FROM alpine:3.15.0 as unbound
+FROM alpine:3.16.2 as unbound
 ARG UNBOUND_VERSION=latest
 
 WORKDIR /tmp/src
@@ -9,7 +9,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN addgroup _unbound && adduser -D -H -s /etc -h /dev/null -G _unbound _unbound
 
-RUN apk add --no-cache build-base=0.5-r2 curl=7.80.0-r0 linux-headers=5.10.41-r0 libevent=2.1.12-r4 libevent-dev=2.1.12-r4 expat=2.4.3-r0 expat-dev=2.4.3-r0 openssl=1.1.1l-r8 openssl-dev=1.1.1l-r8 nghttp2-dev=1.46.0-r0 && \
+RUN apk add --no-cache build-base=0.5-r3 curl=7.83.1-r3 linux-headers=5.16.7-r1 libevent=2.1.12-r4 libevent-dev=2.1.12-r4 expat=2.4.9-r0 expat-dev=2.4.9-r0 openssl=1.1.1q-r0 openssl-dev=1.1.1q-r0 nghttp2-dev=1.47.0-r0 && \
       curl -L https://github.com/lukas2511/dehydrated/archive/master.tar.gz | tar -xz && \
       mkdir -p /opt && \
       mv ./dehydrated-master/dehydrated /opt/ && \
@@ -26,7 +26,7 @@ RUN apk add --no-cache build-base=0.5-r2 curl=7.80.0-r0 linux-headers=5.10.41-r0
 
 # ----------------------------
 
-FROM alpine:3.15.0
+FROM alpine:3.16.2
 
 ARG BUILD_DESCRIPTION="Unbound, in a container"
 ARG UNBOUND_VERSION=latest
@@ -57,16 +57,16 @@ COPY start.sh pi-hole.conf unbound.conf /
 WORKDIR /opt/unbound/etc/unbound
 
 RUN apk add --no-cache \
-      bash=5.1.8-r0 \
-      coreutils=9.0-r2 \
-      curl=7.80.0-r0 \
+      bash=5.1.16-r2 \
+      coreutils=9.1-r0 \
+      curl=7.83.1-r3 \
       diffutils=3.8-r0 \
-      drill=1.7.2_git20210911-r1 \
-      expat=2.4.3-r0 \
+      drill=1.8.1-r0 \
+      expat=2.4.9-r0 \
       gawk=5.1.1-r0 \
       grep=3.7-r0 \
       libevent=2.1.12-r4 \
-      openssl=1.1.1l-r8 \
+      openssl=1.1.1q-r0 \
       sed=4.8-r0 && \
       addgroup _unbound && adduser -D -H -s /etc -h /dev/null -G _unbound _unbound && \
       chmod +x /start.sh && \
