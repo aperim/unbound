@@ -32,7 +32,7 @@ jobs:
       unbound_version: ${{ steps.information.outputs.unbound_version }}
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       - name: ℹ️ Gather version and environment
         id: information
         # yamllint disable rule:line-length
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
 
       - name: Install Latest Docker
         # yamllint disable rule:line-length
